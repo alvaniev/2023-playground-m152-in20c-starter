@@ -20,7 +20,12 @@
               hide-details
             ></v-text-field>
           </v-card-title>
-          <v-data-table :headers="headers" :items="users" :search="search"></v-data-table>
+          <v-data-table
+            v-model:items-per-page="itemsPerPage"
+            :headers="headers"
+            :items="users"
+            item-value="id"
+          ></v-data-table>
         </v-card>
       </v-col>
     </v-row>
@@ -33,88 +38,126 @@
 </template> -->
 
 <template>
-  <v-card>
-    <v-card-item><v-card-title>foo</v-card-title></v-card-item>
-    <v-card-text>{{ msg }}</v-card-text>
-  </v-card>
+  <v-container fluid>
+    <v-snackbar v-model="alert" top :color="alertcolor">
+      <div class="d-flex justify-space-between align-center">
+        {{ alertmsg }}
+        <v-btn variant="text" @click="close" right>Close</v-btn>
+      </div>
+    </v-snackbar>
+    <v-row>
+      <v-col cols="12">
+        <v-table>
+          <thead>
+            <tr>
+              <th v-for="header in headers" :key="header.key">
+                {{ header.title }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="user in users" :key="user.id">
+              <td>{{ user.id }}</td>
+              <td>{{ user.name }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.address.zipcode }}</td>
+              <td>{{ user.address.city }}</td>
+            </tr>
+          </tbody>
+        </v-table>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12">
+        <v-btn @click="getUsers">Benutzer laden</v-btn>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-
 import { ref } from "vue";
 
 export default {
   setup() {
     const msg = ref("Hello World");
+    const headers = ref([
+      {
+        title: "ID",
+        align: "start",
+        sortable: true,
+        key: "id",
+      },
+      {
+        title: "Name",
+        align: "start",
+        sortable: true,
+        key: "name",
+      },
+      {
+        title: "E-Mail",
+        align: "start",
+        sortable: true,
+        key: "email",
+      },
+      {
+        title: "PLZ",
+        align: "start",
+        sortable: true,
+        key: "address.zipcode",
+      },
+      {
+        title: "Stadt",
+        align: "start",
+        sortable: true,
+        key: "address.city",
+      },
+    ]);
+    const users = ref([]);
+    const alert = ref(false);
+    const alertmsg = ref("");
+    const alertcolor = ref("");
+    const search = ref("");
+    const itemsPerPage = ref(10);
 
-    return {msg};
-  },
-
-  // data() {
-  //   return {
-  //     alert: false,
-  //     alertmsg: "",
-  //     alertcolor: "",
-  //     search: "",
-  //     headers: [
-  //       {
-  //         text: "ID",
-  //         align: "start",
-  //         sortable: true,
-  //         value: "id"
-  //       },
-  //       {
-  //         text: "Name",
-  //         align: "start",
-  //         sortable: true,
-  //         value: "name"
-  //       },
-  //       {
-  //         text: "E-Mail",
-  //         align: "start",
-  //         sortable: true,
-  //         value: "email"
-  //       },
-  //       {
-  //         text: "PLZ",
-  //         align: "start",
-  //         sortable: true,
-  //         value: "address.zipcode"
-  //       },
-  //       {
-  //         text: "Stadt",
-  //         align: "start",
-  //         sortable: true,
-  //         value: "address.city"
-  //       }
-  //     ],
-  //     users: []
-  //   };
-  // },
-  methods: {
-    async getUsers() {
+    async function getUsers() {
       try {
         const res = await fetch("https://jsonplaceholder.typicode.com/users");
-        this.users = await res.json();
+        users.value = await res.json();
         if (!res.ok) {
-          throw new Error(`Fehler: ${res.statusText} - (HTTP-Status: ${res.status})`);
+          throw new Error(
+            `Fehler: ${res.statusText} - (HTTP-Status: ${res.status})`
+          );
         }
 
         // display snackbar with success message
-        this.alertmsg = `Benutzer geladen - (HTTP-Status ${res.status})`;
-        this.alertcolor = "success";
-        this.alert = true;
+        alertmsg.value = `Benutzer geladen - (HTTP-Status ${res.status})`;
+        alertcolor.value = "success";
+        alert.value = true;
       } catch (err) {
         // display snackbar with error message
-        this.alertmsg = err.message;
-        this.alertcolor = "error";
-        this.alert = true;
+        alertmsg.value = err.message;
+        alertcolor.value = "error";
+        alert.value = true;
       }
-    },
-    close() {
-      this.alert = false;
     }
-  }
+    function close() {
+      alert.value = false;
+    }
+
+    return {
+      msg,
+      headers,
+      users,
+      alert,
+      alertmsg,
+      alertcolor,
+      search,
+      itemsPerPage,
+      close,
+      getUsers,
+    };
+  },
 };
 </script>
 
