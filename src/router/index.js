@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import Users from '../views/Users.vue'
+import UsersTable from '../views/UsersTable.vue'
+import UsersDataTable from '../views/UsersDataTable.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,9 +20,13 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue')
     },
     {
-      path: '/users',
-      name: 'users',
-      component: Users
+      path: '/users-table',
+      name: 'users-table',
+      component: UsersTable
+    },    {
+      path: '/users-data-table',
+      name: 'users-data-table',
+      component: UsersDataTable
     },
   ]
 })
