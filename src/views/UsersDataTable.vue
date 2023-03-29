@@ -39,6 +39,7 @@
 </template>
 
 <script>
+
 import useUsers from "../hooks/users.js";
 
 export default {
