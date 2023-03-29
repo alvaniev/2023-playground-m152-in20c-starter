@@ -1,17 +1,16 @@
 <template>
   <v-container fluid>
-    <v-snackbar v-model="alert" top :color="alertcolor">
-      <div class="d-flex justify-space-between align-center">
-        {{ alertmsg }}
-        <v-btn variant="text" @click="close" right>Close</v-btn>
-      </div>
+    <v-snackbar v-model="alert" location="top" :color="alertcolor"
+      >{{ alertmsg }}
+      <template #actions
+        ><v-btn variant="text" @click="close" right>Close</v-btn></template
+      >
     </v-snackbar>
     <v-row>
       <v-col cols="12">
         <v-card>
-          <v-card-title>
-            Benutzer
-            <v-spacer></v-spacer>
+          <v-card-title> Benutzer </v-card-title>
+          <v-card-item>
             <v-text-field
               v-model="search"
               append-icon="mdi-magnify"
@@ -19,7 +18,7 @@
               single-line
               hide-details
             ></v-text-field>
-          </v-card-title>
+          </v-card-item>
           <v-card-item>
             <v-data-table
               :headers="headers"
@@ -39,7 +38,6 @@
 </template>
 
 <script>
-
 import useUsers from "../hooks/users.js";
 
 export default {

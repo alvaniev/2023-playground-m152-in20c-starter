@@ -1,10 +1,10 @@
 <template>
   <v-container fluid>
-    <v-snackbar v-model="alert" top :color="alertcolor">
-      <div class="d-flex justify-space-between align-center">
-        {{ alertmsg }}
-        <v-btn variant="text" @click="close" right>Close</v-btn>
-      </div>
+    <v-snackbar v-model="alert" location="top" :color="alertcolor"
+      >{{ alertmsg }}
+      <template #actions
+        ><v-btn variant="text" @click="close" right>Close</v-btn></template
+      >
     </v-snackbar>
     <v-row>
       <v-col cols="12">
