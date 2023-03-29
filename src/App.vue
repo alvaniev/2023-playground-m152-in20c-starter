@@ -1,5 +1,5 @@
 <template>
-  <v-app app>
+  <v-app id="foofoo">
     <v-app-bar color="primary" density="compact">
       <template #prepend>
         <v-app-bar-nav-icon @click.stop="swap"> </v-app-bar-nav-icon>
@@ -50,7 +50,7 @@
     </v-navigation-drawer>
 
     <v-main>
-      <router-view />
+      <router-view/>
     </v-main>
   </v-app>
 </template>
