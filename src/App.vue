@@ -1,87 +1,118 @@
-<script setup>
-// import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+  <v-app app>
+    <v-app-bar color="primary" density="compact">
+      <template #prepend>
+        <v-app-bar-nav-icon @click.stop="swap"> </v-app-bar-nav-icon>
+      </template>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+      <v-toolbar-title> Playground </v-toolbar-title>
 
-      <nav>
-        <router-link to="/">Home</router-link>
-        <router-link to="/about">About</router-link>
-        <router-link to="/users-table">Users-Table</router-link>
-        <router-link to="/users-data-table">Users-Data-Table</router-link>
-      </nav>
-    </div>
-  </header>
+      <v-toolbar-items>
+        <v-menu v-for="ni in navitems" :key="ni.title">
+          <template #activator="{ props }">
+            <v-btn v-bind="props">
+              {{ ni.title }}
+            </v-btn>
+          </template>
+          <v-list density="compact">
+            <v-list-item
+              v-for="mi in ni.menuitems"
+              :key="mi.title"
+              :to="mi.action"
+            >
+              <v-list-item-title>{{ mi.title }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-toolbar-items>
+    </v-app-bar>
 
-  <router-view />
+    <v-navigation-drawer v-model="isVisible">
+      <v-list nav density="compact">
+        <v-list-group
+          v-for="ni in navitems"
+          :key="ni.title"
+          collapse-icon="mdi-magnify"
+          expand-icon="mdi-magnify"
+        >
+          <template #activator="{ props }">
+              <v-list-subheader v-bind="props">{{ ni.title }}</v-list-subheader>
+          </template>
+          <v-list-item
+            v-for="mi in ni.menuitems"
+            :key="mi.title"
+            :to="mi.action"
+          >
+            <v-list-item-title>{{ mi.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list-group>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-main>
+      <router-view />
+    </v-main>
+  </v-app>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
+<script>
+import { ref } from "vue";
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
+export default {
+  setup() {
+    const isVisible = ref(false);
+    const navitems = ref([
+      {
+        title: "My Examples",
+        icon: "mdi-account-box",
+        menuitems: [
+          {
+            title: "Example 1 (empty)",
+            action: "/",
+          },
+          {
+            title: "Example 2 (empty)",
+            action: "/",
+          },
+          {
+            title: "Example 3 (empty)",
+            action: "/",
+          },
+        ],
+      },
+      {
+        title: "Basic Examples",
+        icon: "mdi-file-code-outline",
+        menuitems: [
+          {
+            title: "Hello World",
+            action: "/",
+          },
+          {
+            title: "Counter",
+            action: "/counter",
+          },
+          {
+            title: "Carousel",
+            action: "/carousel",
+          },
+          {
+            title: "Vuetify Normal Table",
+            action: "/users-table",
+          },
+          {
+            title: "Vuetifay Data Table",
+            action: "/users-data-table",
+          },
+        ],
+      },
+    ]);
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
+    function swap() {
+      isVisible.value = !isVisible.value;
+    }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
-</style>
+    return { isVisible, navitems, swap };
+  },
+};
+</script>

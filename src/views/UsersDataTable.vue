@@ -7,7 +7,7 @@
       >
     </v-snackbar>
     <v-row>
-      <v-col cols="12">
+      <v-col cols="12" >
         <v-card>
           <v-card-title> Benutzer </v-card-title>
           <v-card-item>
