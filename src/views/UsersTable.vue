@@ -42,11 +42,11 @@
 </template>
 
 <script>
-import useUsers from "../hooks/users.js";
+import useUsers from "@/hooks/users.js";
 
 export default {
   setup() {
-    const [
+    const {
       headers,
       users,
       alert,
@@ -56,7 +56,7 @@ export default {
       itemsPerPage,
       close,
       getUsers,
-    ] = useUsers();
+     } = useUsers();
 
     return {
       headers,
